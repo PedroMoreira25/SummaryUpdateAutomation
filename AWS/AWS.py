@@ -25,7 +25,9 @@ def idQuery(query: str): #aqui realizamos a query no Athena e obtemos o id dela
         QueryExecutionContext={'Database':'product' },
         ResultConfiguration={'OutputLocation':'s3://output.athena/' }
     )
+    print(idDaQuery['QueryExecutionId'])
     return idDaQuery['QueryExecutionId']
+
 
 def getQuery(idQuery1): #aqui esperamos a query ser executada
     key = False 
@@ -55,6 +57,12 @@ def exeQuery(idQ):
         #pprint(dados)
         #print('\n')
     return(dados)
+
+
+
+
+
+
 
 def CrashData(dados):
     a = 0

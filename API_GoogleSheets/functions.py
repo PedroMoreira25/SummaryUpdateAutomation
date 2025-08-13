@@ -1,7 +1,7 @@
 
 import os 
 import pandas as pd 
-
+from pprint import pprint 
 from dotenv import load_dotenv
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -32,7 +32,6 @@ def credenciais():
             # Save the credentials for the next run
             with open("token.json", "w") as token:
                 token.write(creds.to_json())
-    print(creds)
     return creds
 
 
@@ -51,36 +50,37 @@ def getSheet(sheetId, creds2, range):
             .execute()
         )
     
-        dados = pd.DataFrame(result['values'])
-        print(dados)
+        dados = (result['values'])
+        return dados 
 
     except HttpError as err:
         print(err)
 
 
-"""
-def postSheet(sheetId, creds1, range1):
-    try:
-        service = build("sheets", "v4", credentials=creds1)
-        # Call the Sheets API
+def getIndexLastRowSheet(sheetId, cred, range): #traz o índice da última linha com dados preenchidos da planilha
+    try: 
+        service = build("sheets", "v4", credentials=cred)
+
+    # Call the Sheets API
         sheet = service.spreadsheets()
-        print("\n")
-        cpf = input("Digite o CPF do paciente: ")
-        cor_alerta = input("Digite a cor do alerta: ")
-        data = input("Digite a data do alerta em dd/mm/aaaa: ")
-        inputValues = [
-            [cpf, cor_alerta, data],
-            ["Teste1", "TEste1", "Teste1"],
-            ["Teste2", "Teste2", "Teste2"],
-            ["Teste3", "Teste3", "TEste3"]
-        ]
-        result = (sheet.values().append(spreadsheetId=sheetId,
-                                                    range=range1, valueInputOption="USER_ENTERED", body={'values': inputValues}).execute())
-        return result
+
+    # LER informações do Google Sheets
+        result = (
+            sheet.values()
+            .get(spreadsheetId=sheetId, range=range)
+            .execute()
+        )
+    
+        dados = (result['values'])
+        IndexLastRow = (len(dados))
+        return IndexLastRow
+
     except HttpError as err:
         print(err)
-"""
 
+    
+
+# O postSheet abaixo faz um post na planilha usando o método append
 def postSheet(sheetId, creds1, range1, dados):
     try:
         service = build("sheets", "v4", credentials=creds1)
@@ -91,3 +91,34 @@ def postSheet(sheetId, creds1, range1, dados):
         return result
     except HttpError as err:
         print(err)
+
+
+# o postSheet abaixo faz um post de dados na planilha usando o método update
+"""
+def postSheet(sheetId, cred, range, dados):
+    try: 
+        service = build("sheets", "v4", credentials=cred)
+        #Call the sheets API
+        sheet = service.spreadsheets()
+        result = sheet.values().update(spreadsheetId=sheetId,
+                                       range=range, valueInputOption="USER_ENTERED", body = {'values': dados}).execute()
+        return result
+    except HttpError as err:
+        print(err)
+"""
+# o postSheet abaixo faz um post de dados na planilha usando o método batchUpdate
+"""
+def postSheet(sheetId, cred, range, dados):
+    try:
+        service = build("sheets", "v4", credentials=cred)
+        #Call the sheets API
+        sheet = service.spreadsheets()
+        data = [
+            {"range": range, "values": dados}
+        ]
+        body = {"valueInputOption": "USER_ENTERED", "data": data}
+        result = sheet.values().batchUpdate(spreadsheetId=sheetId, body=body).execute()
+        return result
+    except HttpError as err:
+        print(err)
+"""
