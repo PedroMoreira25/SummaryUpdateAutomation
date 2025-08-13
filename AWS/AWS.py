@@ -41,33 +41,7 @@ def getQuery(idQuery1): #aqui esperamos a query ser executada
         time.sleep(1)
         print("Executando a query...") #programa dorme por um segundo
 
-def getResultQuery(idQ1):
-    response = session.client('athena').get_query_results(QueryExecutionId=idQ1)
-    return response 
-
-def exeQuery(idQ):
-    dadosBrutos = getResultQuery(idQ)
-    dados = []
-    for data in dadosBrutos['ResultSet']['Rows'][1:]: #percorre 'Data' por 'Data'
-        linha = []
-        for eleList in data['Data']: #percorre interior do 'Data' 
-            cell = eleList.get('VarCharValue')
-            linha.append(cell)
-        dados.append(linha)
-        #pprint(dados)
-        #print('\n')
-    return(dados)
-
-
-
-
-
-
-
-def CrashData(dados):
-    a = 0
-    d1 = [] 
-    while a < 4:
-        d1.append(dados[a])
-        a = a + 1 
+def DownloadResultQuery(idQuery):
+    s3 = boto3.client('s3')
+    s3.download_file('output.athena', f'{idQuery}.csv', f'DownloadsData/{idQuery}.csv')
     

@@ -19,4 +19,4 @@ session = boto3.Session(
 
 s3 = boto3.client('s3')
 #s3://output.athena/f1144be1-ebf6-4555-b40a-d42d6d28fe2a.csv
-s3.download_file('output.athena', 'f1144be1-ebf6-4555-b40a-d42d6d28fe2a.csv', 'f1144be1-ebf6-4555-b40a-d42d6d28fe2a.csv')
+s3.download_file('output.athena', 'f1144be1-ebf6-4555-b40a-d42d6d28fe2a.csv', 'DownloadsData/f1144be1-ebf6-4555-b40a-d42d6d28fe2a.csv')
