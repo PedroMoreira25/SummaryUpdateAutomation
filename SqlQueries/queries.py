@@ -1,5 +1,7 @@
 a=0
-alertas="""
+
+queries_dict = {
+    "alertas": """
 WITH idade AS(
     SELECT DISTINCT 
         ROW_NUMBER() OVER(PARTITION BY y, m, d, atendimento_id ORDER BY age DESC) AS rownumber,
@@ -8,58 +10,45 @@ WITH idade AS(
         d, 
         m,
         y
-        FROM 
-            lc_patient
-                WHERE 
-                    age<>''
-                ),
+    FROM lc_patient
+    WHERE age<>''
+),
 sexo AS(
     SELECT DISTINCT 
         ROW_NUMBER() OVER(PARTITION BY atendimento_id ORDER BY Y DESC, M DESC, D DESC) AS rownumber,
         atendimento_id,
         symptoms_values
-        FROM 
-            lc_vital_signs
-                WHERE 
-                    symptoms_question LIKE '%Sexo%' OR symptoms_question LIKE '%sexo%'
-                )    
+    FROM lc_vital_signs
+    WHERE symptoms_question LIKE '%Sexo%' OR symptoms_question LIKE '%sexo%'
+)
 SELECT DISTINCT 
     alert.atendimento_id,
     idade.age,
     sexo.symptoms_values,
     DATE_FORMAT(alert.data_alerta, '%d-%m-%Y %H:%i:%s') AS data, 
     alert.resultado
-    FROM 
-        lc_alert AS alert
-            LEFT JOIN 
-                idade 
-                    ON alert.atendimento_id = idade.atendimento_id 
-            LEFT JOIN 
-                sexo 
-                    ON alert.atendimento_id = sexo.atendimento_id
-                        WHERE 
-                            alert.entidade_id={a} 
-                                AND DATE_TRUNC('month', alert.data_alerta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
-                                AND (idade.rownumber=1 OR idade.rownumber IS NULL)
-                                AND (sexo.rownumber=1 OR sexo.rownumber IS NULL)
-                                AND DAY(alert.data_alerta)=idade.d 
-                                AND MONTH(alert.data_alerta)=idade.m 
-                                AND YEAR(alert.data_alerta)=idade.y
+FROM lc_alert AS alert
+LEFT JOIN idade ON alert.atendimento_id = idade.atendimento_id 
+LEFT JOIN sexo ON alert.atendimento_id = sexo.atendimento_id
+WHERE alert.entidade_id={a} 
+AND DATE_TRUNC('month', alert.data_alerta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
+AND (idade.rownumber=1 OR idade.rownumber IS NULL)
+AND (sexo.rownumber=1 OR sexo.rownumber IS NULL)
+AND DAY(alert.data_alerta)=idade.d 
+AND MONTH(alert.data_alerta)=idade.m 
+AND YEAR(alert.data_alerta)=idade.y
+""",
 
-"""
-
-atendimentos="""
+    "atendimentos": """
 WITH falar_com_data AS (
     SELECT 
         atendimento_id,
         data_atendimento
-    FROM 
-        lc_speak_to_team
-    WHERE 
-        entidade_id = {a} 
-        AND DATE_TRUNC('month', data_atendimento) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
-        AND data_do_handover <> data_atendimento
-        AND handover_reason = 'REQUESTED_TEAM_SUPPORT'
+    FROM lc_speak_to_team
+    WHERE entidade_id = {a} 
+    AND DATE_TRUNC('month', data_atendimento) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
+    AND data_do_handover <> data_atendimento
+    AND handover_reason = 'REQUESTED_TEAM_SUPPORT'
 ),
 idade_filtrada AS (
     SELECT *
@@ -84,12 +73,9 @@ idade_filtrada AS (
                     )) ASC,
                     DATE_PARSE(CAST(p.y AS VARCHAR) || '-' || LPAD(CAST(p.m AS VARCHAR), 2, '0') || '-' || LPAD(CAST(p.d AS VARCHAR), 2, '0'), '%Y-%m-%d') ASC
             ) AS rownumber
-        FROM 
-            lc_patient p
-        JOIN 
-            falar_com_data f ON p.atendimento_id = f.atendimento_id
-        WHERE 
-            p.age <> ''
+        FROM lc_patient p
+        JOIN falar_com_data f ON p.atendimento_id = f.atendimento_id
+        WHERE p.age <> ''
     ) AS sub
     WHERE rownumber = 1
 ),
@@ -98,12 +84,9 @@ sexo AS (
         ROW_NUMBER() OVER (PARTITION BY atendimento_id ORDER BY y DESC, m DESC, d DESC) AS rownumber,
         atendimento_id,
         symptoms_values
-    FROM 
-        lc_vital_signs
-    WHERE 
-        LOWER(symptoms_question) LIKE '%sexo%'
+    FROM lc_vital_signs
+    WHERE LOWER(symptoms_question) LIKE '%sexo%'
 )
-
 -- PARTE 1: ALERTAS
 SELECT DISTINCT 
     alert.atendimento_id,
@@ -111,35 +94,27 @@ SELECT DISTINCT
     sexo.symptoms_values,
     DATE_FORMAT(alert.data_alerta, '%d-%m-%Y %H:%i:%s') AS Data,
     'Alerta' AS tipo_atendimento
-FROM 
-    lc_alert AS alert
-LEFT JOIN 
-    (
-        SELECT DISTINCT 
-            ROW_NUMBER() OVER (PARTITION BY y, m, d, atendimento_id ORDER BY age DESC) AS rownumber,
-            atendimento_id,
-            age, 
-            d, 
-            m,
-            y
-        FROM 
-            lc_patient
-        WHERE 
-            age <> ''
-    ) AS idade ON alert.atendimento_id = idade.atendimento_id
-LEFT JOIN 
-    sexo ON alert.atendimento_id = sexo.atendimento_id
-WHERE 
-    alert.entidade_id = {a} 
-    AND DATE_TRUNC('month', alert.data_alerta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
-    AND (idade.rownumber = 1 OR idade.rownumber IS NULL)
-    AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
-    AND DAY(alert.data_alerta) = idade.d 
-    AND MONTH(alert.data_alerta) = idade.m 
-    AND YEAR(alert.data_alerta) = idade.y
-
+FROM lc_alert AS alert
+LEFT JOIN (
+    SELECT DISTINCT 
+        ROW_NUMBER() OVER (PARTITION BY y, m, d, atendimento_id ORDER BY age DESC) AS rownumber,
+        atendimento_id,
+        age, 
+        d, 
+        m,
+        y
+    FROM lc_patient
+    WHERE age <> ''
+) AS idade ON alert.atendimento_id = idade.atendimento_id
+LEFT JOIN sexo ON alert.atendimento_id = sexo.atendimento_id
+WHERE alert.entidade_id = {a} 
+AND DATE_TRUNC('month', alert.data_alerta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
+AND (idade.rownumber = 1 OR idade.rownumber IS NULL)
+AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
+AND DAY(alert.data_alerta) = idade.d 
+AND MONTH(alert.data_alerta) = idade.m 
+AND YEAR(alert.data_alerta) = idade.y
 UNION ALL
-
 -- PARTE 2: FALAR COM EQUIPE
 SELECT DISTINCT 
     falar.atendimento_id,
@@ -147,22 +122,18 @@ SELECT DISTINCT
     sexo.symptoms_values,
     DATE_FORMAT(falar.data_atendimento,  '%d-%m-%Y %H:%i:%s') AS Data, 
     'falar_com_equipe' AS tipo_atendimento
-FROM 
-    lc_speak_to_team AS falar
-LEFT JOIN 
-    idade_filtrada AS idade ON falar.atendimento_id = idade.atendimento_id 
-        AND falar.data_atendimento = idade.data_atendimento
-LEFT JOIN 
-    sexo ON falar.atendimento_id = sexo.atendimento_id
-WHERE 
-    falar.entidade_id = {a}
-    AND DATE_TRUNC('month', falar.data_atendimento) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))
-    AND falar.data_do_handover <> falar.data_atendimento
-    AND falar.handover_reason = 'REQUESTED_TEAM_SUPPORT'
-    AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
-"""
+FROM lc_speak_to_team AS falar
+LEFT JOIN idade_filtrada AS idade ON falar.atendimento_id = idade.atendimento_id 
+    AND falar.data_atendimento = idade.data_atendimento
+LEFT JOIN sexo ON falar.atendimento_id = sexo.atendimento_id
+WHERE falar.entidade_id = {a}
+AND DATE_TRUNC('month', falar.data_atendimento) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))
+AND falar.data_do_handover <> falar.data_atendimento
+AND falar.handover_reason = 'REQUESTED_TEAM_SUPPORT'
+AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
+""",
 
-teleconsultas="""
+    "teleconsultas": """
 WITH teleconsulta_data AS (
     SELECT 
         atendimento_id,
@@ -240,9 +211,9 @@ WHERE
     AND record.servicestep='telemedicine'
     AND record.usuario<>'SISTEMA'  
     AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
-"""
+""",
 
-cidades = """
+    "cidades": """
 WITH idade AS(
     SELECT DISTINCT 
         ROW_NUMBER() OVER (PARTITION BY atendimento_id, CONCAT(CAST(d AS VARCHAR),'/',CAST(m AS VARCHAR),'/',CAST(y AS VARCHAR)) ORDER BY age DESC) AS rownumber,
@@ -283,9 +254,9 @@ WHERE
     AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
     AND m = MONTH(DATE_ADD('month', -1, NOW()))
     AND y = YEAR(DATE_ADD('month', -1, NOW()))
-"""
+""",
 
-fluxos = """
+    "fluxos": """
 WITH idade AS(
     SELECT DISTINCT 
         ROW_NUMBER() OVER (PARTITION BY atendimento_id, CONCAT(CAST(d AS VARCHAR),'/',CAST(m AS VARCHAR),'/',CAST(y AS VARCHAR)) ORDER BY age DESC) AS rownumber,
@@ -328,10 +299,9 @@ SELECT DISTINCT
                 AND idade.data = CAST(DATE_FORMAT(vital.data_coleta, '%e/%c/%Y') AS VARCHAR)
                 AND idade.rownumber = 1 
                 AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
+""",
 
-"""
-
-cid = """
+    "cid": """
 WITH idade AS (
 	SELECT atendimento_id,
 		age,
@@ -389,10 +359,9 @@ FROM lc_soap_infos AS soap
 	AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
 WHERE soap.entidade_id = {a}
 	AND DATE_TRUNC('month', soap.data_do_soap_evolution) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))
+""",
 
-"""
-
-comorbidades = """
+    "comorbidades": """
 WITH idade AS(
     SELECT DISTINCT 
         ROW_NUMBER() OVER (PARTITION BY atendimento_id, CONCAT(CAST(d AS VARCHAR),'/',CAST(m AS VARCHAR),'/',CAST(y AS VARCHAR)) ORDER BY age DESC) AS rownumber,
@@ -458,9 +427,9 @@ SELECT DISTINCT
             AND idade.dataa = CAST(DATE_FORMAT(comor.data_coleta, '%e/%c/%Y') AS VARCHAR)
             AND idade.rownumber = 1 
             AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL) 
-"""
+""",
 
-idade = """
+    "idade": """
 WITH idade AS(
     SELECT DISTINCT 
         ROW_NUMBER() OVER (PARTITION BY atendimento_id, CONCAT(CAST(d AS VARCHAR),'/',CAST(m AS VARCHAR),'/',CAST(y AS VARCHAR)) ORDER BY age DESC) AS rownumber,
@@ -500,9 +469,9 @@ SELECT DISTINCT
             AND idade.rownumber = 1
             AND idade.age<>''
             AND DATE_FORMAT(alert.data_alerta, '%e/%c/%Y') = idade.dataa
-"""
+""",
 
-sexo = """
+    "sexo": """
 WITH idade AS(
     SELECT DISTINCT 
         ROW_NUMBER() OVER (PARTITION BY atendimento_id, CONCAT(CAST(d AS VARCHAR),'/',CAST(m AS VARCHAR),'/',CAST(y AS VARCHAR)) ORDER BY age DESC) AS rownumber,
@@ -542,4 +511,4 @@ SELECT DISTINCT
             AND idade.rownumber = 1
             AND DATE_FORMAT(vital.data_coleta, '%e/%c/%Y') = idade.dataa
 """
-
+}

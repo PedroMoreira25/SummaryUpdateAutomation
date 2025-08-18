@@ -41,3 +41,4 @@ def updateAtendimentos(a: int, sheetId):
     RANGE = os.getenv("VTRP_RANGE_ATENDIMENTOS")
     fc.postSheet(SHEET_ID, fc.credenciais(), RANGE, leitor_csv)
 """
+
