@@ -23,6 +23,7 @@ def update(entidade_id: int, query: str, sheetId: str):
     arquivo_csv = open(f'DownloadsData/{idQuery}.csv')
     leitor_csv = csv.reader(arquivo_csv)
     leitor_csv = list(leitor_csv)
+    leitor_csv = leitor_csv[1:]
     query = query.upper()
     RANGE = os.getenv(query)
     SHEET_ID = os.getenv(sheetId)
