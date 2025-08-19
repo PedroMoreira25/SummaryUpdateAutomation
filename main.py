@@ -9,6 +9,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from API_GoogleSheets import functions as fc
-import updatesCustomers as up 
+from updatesQueries import update 
 
-up.updateVtrp()
+update(76, "teste", "VTRP_ID")

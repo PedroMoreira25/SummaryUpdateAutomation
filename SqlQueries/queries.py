@@ -1,6 +1,6 @@
 a=0
 
-queries_dict = {
+queries = {
     "alertas": """
 WITH idade AS(
     SELECT DISTINCT 
@@ -510,5 +510,6 @@ SELECT DISTINCT
             AND sexo.rownumber = 1
             AND idade.rownumber = 1
             AND DATE_FORMAT(vital.data_coleta, '%e/%c/%Y') = idade.dataa
-"""
+""",
+"teste" : "SELECT DISTINCT * FROM lc_alert WHERE entidade_id = {a} LIMIT 10"
 }

@@ -12,33 +12,18 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build 
 from googleapiclient.errors import HttpError 
 from API_GoogleSheets import functions as fc 
-from SqlQueries import queries 
+from SqlQueries import queries as q  
 
 load_dotenv()
 
-def updateAlert(a: int, sheetId):
-    sql = queries.alertas.format(a=a)
+def update(entidade_id: int, query: str, sheetId: str):
+    sql = q.queries[query].format(a=entidade_id)
     idQuery = aws.idQuery(sql)
     aws.DownloadResultQuery(aws.getQuery(idQuery))
     arquivo_csv = open(f'DownloadsData/{idQuery}.csv')
     leitor_csv = csv.reader(arquivo_csv)
     leitor_csv = list(leitor_csv)
-    RANGE = os.getenv("ALERTAS")
-    SHEET_ID = os.getenv("{sheetId}")
+    query = query.upper()
+    RANGE = os.getenv(query)
+    SHEET_ID = os.getenv(sheetId)
     fc.postSheet(SHEET_ID, fc.credenciais(), RANGE, leitor_csv)
-"""
-def testeUpdate(a: int, query, sheetId):
-    sql = queries.{query}.format(a=a)
-"""
-
-"""
-def updateAtendimentos(a: int, sheetId):
-    idQuery = aws.idQuery(vtrp.atendimentos)
-    aws.DownloadResultQuery(aws.getQuery(idQuery))
-    arquivo_csv = open(f'DownloadsData/{idQuery}.csv')
-    leitor_csv = csv.reader(arquivo_csv)
-    leitor_csv = list(leitor_csv)
-    RANGE = os.getenv("VTRP_RANGE_ATENDIMENTOS")
-    fc.postSheet(SHEET_ID, fc.credenciais(), RANGE, leitor_csv)
-"""
-
