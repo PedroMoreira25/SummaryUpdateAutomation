@@ -1,0 +1,12 @@
+1. consultas separadas por pasta
+2. tudo em variável de ambiente. 
+3. utilizar laço e array
+4. jogar tudo isso no Docker
+5. rodar no Docker 
+
+
+parameters_client = { 
+    "litoral" : ["teste1", "teste2"],
+    "ugf" : ["teste2"]
+}
+

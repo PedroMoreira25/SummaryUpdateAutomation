@@ -17,10 +17,11 @@ from SqlQueries import queries as q
 load_dotenv()
 
 def update(entidade_id: int, query: str, sheetId: str):
+    print(q.queries[query])
     sql = q.queries[query].format(a=entidade_id)
     idQuery = aws.idQuery(sql)
     aws.DownloadResultQuery(aws.getQuery(idQuery))
-    arquivo_csv = open(f'DownloadsData/{idQuery}.csv')
+    arquivo_csv = open(f'DownloadsData/{idQuery}.csv', newline='', encoding='utf-8')
     leitor_csv = csv.reader(arquivo_csv)
     leitor_csv = list(leitor_csv)
     leitor_csv = leitor_csv[1:]

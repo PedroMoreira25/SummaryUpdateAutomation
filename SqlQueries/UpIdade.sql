@@ -1,0 +1,40 @@
+WITH idade AS(
+    SELECT DISTINCT 
+        ROW_NUMBER() OVER (PARTITION BY atendimento_id, CONCAT(CAST(d AS VARCHAR),'/',CAST(m AS VARCHAR),'/',CAST(y AS VARCHAR)) ORDER BY age DESC) AS rownumber,
+        atendimento_id,
+        age,
+        CONCAT(CAST(d AS VARCHAR),'/',CAST(m AS VARCHAR),'/',CAST(y AS VARCHAR)) AS dataa
+        FROM 
+            lc_patient
+        ),
+sexo AS (
+    SELECT DISTINCT 
+        ROW_NUMBER() OVER (PARTITION BY atendimento_id ORDER BY y DESC, m DESC, d DESC) AS rownumber,
+        atendimento_id,
+        symptoms_values
+    FROM 
+        lc_vital_signs
+    WHERE 
+        LOWER(symptoms_question) LIKE '%sexo%'
+)
+SELECT DISTINCT 
+    alert.atendimento_id, 
+    idade.age,
+    sexo.symptoms_values,
+    CONCAT(CAST(MONTH(alert.data_alerta) AS VARCHAR),'-',CAST(YEAR(alert.data_alerta) AS VARCHAR)) AS "Mês"
+    FROM 
+        lc_alert AS alert 
+        LEFT JOIN 
+            idade  
+            ON idade.atendimento_id = alert.atendimento_id 
+        LEFT JOIN 
+            sexo 
+            ON sexo.atendimento_id = alert.atendimento_id 
+        WHERE 
+            alert.entidade_id={a} 
+            AND YEAR(alert.data_alerta) > 2022 
+            AND DATE_TRUNC('month', alert.data_alerta) <> DATE_TRUNC('month', NOW()) 
+            AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
+            AND idade.rownumber = 1
+            AND idade.age<>''
+            AND DATE_FORMAT(alert.data_alerta, '%e/%c/%Y') = idade.dataa

@@ -11,4 +11,9 @@ from googleapiclient.errors import HttpError
 from API_GoogleSheets import functions as fc
 from updatesQueries import update 
 
-update(76, "teste", "VTRP_ID")
+
+#update(65, "alertasLitoral", "LITORAL_ID")
+
+#update(65, "UpComorbidades", "LITORAL_ID")
+
+update(65, "teste", "LITORAL_ID")
