@@ -20,6 +20,7 @@ sexo AS(
 SELECT DISTINCT 
     alert.atendimento_id,
     idade.age,
+    idade.age,
     sexo.symptoms_values,
     DATE_FORMAT(alert.data_alerta, '%d-%m-%Y %H:%i:%s') AS data, 
     alert.resultado
