@@ -1,0 +1,1 @@
+SELECT DISTINCT * FROM lc_alert WHERE entidade_id = {a} LIMIT 10
