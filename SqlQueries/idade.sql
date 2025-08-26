@@ -5,7 +5,7 @@ WITH idade AS(
         age,
         CONCAT(CAST(d AS VARCHAR),'/',CAST(m AS VARCHAR),'/',CAST(y AS VARCHAR)) AS dataa
         FROM 
-            lc_patient
+            {BDp}
         ),
 sexo AS (
     SELECT DISTINCT 
@@ -13,7 +13,7 @@ sexo AS (
         atendimento_id,
         symptoms_values
     FROM 
-        lc_vital_signs
+        {BDv}
     WHERE 
         LOWER(symptoms_question) LIKE '%sexo%'
 )
@@ -23,7 +23,7 @@ SELECT DISTINCT
     sexo.symptoms_values,
     CONCAT(CAST(MONTH(alert.data_alerta) AS VARCHAR),'-',CAST(YEAR(alert.data_alerta) AS VARCHAR)) AS "Mês"
     FROM 
-        lc_alert AS alert 
+        {BDa} AS alert 
         LEFT JOIN 
             idade  
             ON idade.atendimento_id = alert.atendimento_id 
@@ -37,3 +37,4 @@ SELECT DISTINCT
             AND idade.rownumber = 1
             AND idade.age<>''
             AND DATE_FORMAT(alert.data_alerta, '%e/%c/%Y') = idade.dataa
+            limit 5 

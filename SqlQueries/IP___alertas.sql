@@ -1,12 +1,3 @@
-SELECT DISTINCT 
-    *
-        FROM 
-            {BDa}
-                WHERE 
-                    entidade_id = {a}
-                LIMIT 5 
-                
-/*
 WITH idade AS(
     SELECT DISTINCT 
         ROW_NUMBER() OVER(PARTITION BY y, m, d, atendimento_id ORDER BY age DESC) AS rownumber,
@@ -42,6 +33,4 @@ AND (sexo.rownumber=1 OR sexo.rownumber IS NULL)
 AND DAY(alert.data_alerta)=idade.d 
 AND MONTH(alert.data_alerta)=idade.m 
 AND YEAR(alert.data_alerta)=idade.y
-
-
-*/
+LIMIT 5

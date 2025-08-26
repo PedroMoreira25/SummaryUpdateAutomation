@@ -1,5 +1,5 @@
-1. consultas separadas por pasta
-2. tudo em variável de ambiente. 
+1. consultas separadas por pasta - OK 
+2. tudo em variável de ambiente - 
 3. utilizar laço e array
 4. jogar tudo isso no Docker
 5. rodar no Docker 
@@ -10,3 +10,14 @@ parameters_client = {
     "ugf" : ["teste2"]
 }
 
+
+"""
+# ID das planilhas ----------------------------------------------------------|
+VTRP_ID=11Ta_tNTE4xBBxlge6QS3N6kZ26e9ZoTYDI7EeyTo9kM                        #|
+LITORAL_ID=1MvUqruGY-w2LgPSdbHgO6bEq3627B8URkJlb_ZECzyM                     #|
+SALTO_SPREADSHEET_ID=1oQ5EmYHFoyOC35rBxXGxK4phaNOyb_yulIoAkWcMud0           #|
+SULCAPIXABA_SPREADSHEET_ID=1HFS5lq_Os2_KbzuitFuFUF1YCk0yWVncLbGT_QAoIt8     #|
+NOROESTECAPIXABA_SPREADSHEET_ID=1o5xv_fWeHbEqeZccwEwwpm5Dt1bHLEwFG3c2_RWZGzI#|
+MARINGA_SPREADSHEET_ID=1h6D67BNog2Z1Gzif3DwQ4M30dsgn_A5jjCtCI-2ba9k         #|
+#----------------------------------------------------------------------------|
+"""

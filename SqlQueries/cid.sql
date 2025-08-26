@@ -11,7 +11,7 @@ WITH idade AS (
 			),
 			'%Y-%c-%e'
 		) AS data_coleta
-	FROM lc_patient
+	FROM {BDp}
 ),
 idade_filtrada AS (
 	SELECT *
@@ -25,7 +25,7 @@ idade_filtrada AS (
 					soap.data_do_soap_evolution
 					ORDER BY i.data_coleta DESC
 				) AS rn
-			FROM lc_soap_infos AS soap
+			FROM {BDs} AS soap
 				JOIN idade i ON i.atendimento_id = soap.atendimento_id
 				AND i.data_coleta <= soap.data_do_soap_evolution
 		) sub
@@ -40,7 +40,7 @@ sexo AS (
 				m DESC,
 				d DESC
 		) AS rownumber
-	FROM lc_vital_signs
+	FROM {BDv}
 	WHERE LOWER(symptoms_question) LIKE '%sexo%'
 )
 SELECT DISTINCT soap.atendimento_id,
@@ -48,10 +48,11 @@ SELECT DISTINCT soap.atendimento_id,
 	sexo.symptoms_values,
 	soap.document_evolution_soap_cid,
 	soap.data_do_soap_evolution
-FROM lc_soap_infos AS soap
+FROM {BDs} AS soap
 	LEFT JOIN idade_filtrada ON idade_filtrada.atendimento_id = soap.atendimento_id
 	AND idade_filtrada.data_do_soap_evolution = soap.data_do_soap_evolution
 	LEFT JOIN sexo ON sexo.atendimento_id = soap.atendimento_id
 	AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
 WHERE soap.entidade_id = {a}
 	AND DATE_TRUNC('month', soap.data_do_soap_evolution) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))
+	limit 5 

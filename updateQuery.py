@@ -12,13 +12,13 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build 
 from googleapiclient.errors import HttpError 
 from API_GoogleSheets import functions as fc 
-from SqlQueries import queries as q  
+from SqlQueries import queryString as qStr
 
 load_dotenv()
 
-def update(entidade_id: int, query: str, sheetId: str):
-    print(q.queries[query])
-    sql = q.queries[query].format(a=entidade_id)
+def update(entidade_id, query, sheetId, uBDa, uBDp, uBDs, uBDv, uBDt, uBDr):
+    entidade_id = int(entidade_id)
+    sql = qStr.queryString(query).format(a=entidade_id, BDa=uBDa, BDv=uBDv, BDp=uBDp, BDs=uBDs, BDt=uBDs, BDr=uBDr)
     idQuery = aws.idQuery(sql)
     aws.DownloadResultQuery(aws.getQuery(idQuery))
     arquivo_csv = open(f'DownloadsData/{idQuery}.csv', newline='', encoding='utf-8')
@@ -27,5 +27,4 @@ def update(entidade_id: int, query: str, sheetId: str):
     leitor_csv = leitor_csv[1:]
     query = query.upper()
     RANGE = os.getenv(query)
-    SHEET_ID = os.getenv(sheetId)
-    fc.postSheet(SHEET_ID, fc.credenciais(), RANGE, leitor_csv)
+    fc.postSheet(sheetId, fc.credenciais(), RANGE, leitor_csv)

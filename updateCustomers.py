@@ -13,7 +13,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError 
 from API_GoogleSheets import functions as fc 
 from SqlQueries import queries as q  
-import updatesQueries as up 
+import updateQuery as up 
 
 def updateVtrp():
     up.update(76, "alertas", "VTRP_ID")

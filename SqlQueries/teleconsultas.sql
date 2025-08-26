@@ -3,7 +3,7 @@ WITH teleconsulta_data AS (
         atendimento_id,
         data_coleta
     FROM 
-        lc_evolution_record
+        {BDr}
     WHERE 
         entidade_id = {a}
         AND DATE_TRUNC('month', data_coleta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
@@ -36,7 +36,7 @@ idade_filtrada AS (
                     DATE_PARSE(CAST(p.y AS VARCHAR) || '-' || LPAD(CAST(p.m AS VARCHAR), 2, '0') || '-' || LPAD(CAST(p.d AS VARCHAR), 2, '0'), '%Y-%m-%d') ASC
             ) AS rownumber
         FROM 
-            lc_patient p
+            {BDp} p
         JOIN 
             teleconsulta_data f ON p.atendimento_id = f.atendimento_id
         WHERE 
@@ -50,7 +50,7 @@ sexo AS (
         atendimento_id,
         symptoms_values
     FROM 
-        lc_vital_signs
+        {BDv}
     WHERE 
         LOWER(symptoms_question) LIKE '%sexo%'
 )
@@ -62,7 +62,7 @@ SELECT DISTINCT
     record.data_coleta,
     'Teleconsulta' AS teleconsulta
 FROM 
-    lc_evolution_record AS record
+    {BDr} AS record
 LEFT JOIN 
     idade_filtrada AS idade ON record.atendimento_id = idade.atendimento_id 
         AND record.data_coleta = idade.data_coleta
@@ -75,3 +75,4 @@ WHERE
     AND record.servicestep='telemedicine'
     AND record.usuario<>'SISTEMA'  
     AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
+    limit 5 

@@ -22,7 +22,7 @@ session = boto3.Session(
 
 
 
-def idQuery(query: str): #aqui realizamos a query no Athena e obtemos o id dela
+def idQuery(query): #aqui realizamos a query no Athena e obtemos o id dela
     idDaQuery = session.client('athena').start_query_execution(
         QueryString=query,
         QueryExecutionContext={'Database':'product' },
@@ -37,14 +37,18 @@ def getQuery(idQuery1): #aqui esperamos a query ser executada
     while key == False:
         resposta = session.client('athena').get_query_execution(QueryExecutionId=idQuery1)
         status = resposta['QueryExecution']['Status']['State']
-        if status in {'SUCCEEDED', 'FAILED', 'CANCELLED'}:
-            return resposta['QueryExecution']['QueryExecutionId']
+        if status == 'SUCCEEDED':   #, 'FAILED', 'CANCELLED'
             key = True
-            break
-        time.sleep(1)
-        print("Executando a query...") #programa dorme por um segundo
+            print("Query executada com sucesso!!!\n")
+            return resposta['QueryExecution']['QueryExecutionId']
+        elif status in {'FAILED', 'CANCELLED'}:
+            key = True
+            print(status)           
+        else:     
+            time.sleep(1)
+            print(f"{status} - Executando a query...")#programa dorme por um segundo
 
 def DownloadResultQuery(idQuery):
-    s3 = boto3.client('s3')
+    s3 = session.client('s3')
     s3.download_file('output.athena', f'{idQuery}.csv', f'DownloadsData/{idQuery}.csv')
     

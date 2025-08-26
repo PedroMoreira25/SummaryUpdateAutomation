@@ -1,8 +1,11 @@
+SELECT * FROM lc_triage_events WHERE entidade_id = {a} LIMIT 5
+
+/*
 WITH falar_com_data AS (
     SELECT 
         atendimento_id,
         data_atendimento
-    FROM lc_speak_to_team
+    FROM {BDt}
     WHERE entidade_id = {a} 
     AND DATE_TRUNC('month', data_atendimento) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
     AND data_do_handover <> data_atendimento
@@ -31,7 +34,7 @@ idade_filtrada AS (
                     )) ASC,
                     DATE_PARSE(CAST(p.y AS VARCHAR) || '-' || LPAD(CAST(p.m AS VARCHAR), 2, '0') || '-' || LPAD(CAST(p.d AS VARCHAR), 2, '0'), '%Y-%m-%d') ASC
             ) AS rownumber
-        FROM lc_patient p
+        FROM {BDp} p
         JOIN falar_com_data f ON p.atendimento_id = f.atendimento_id
         WHERE p.age <> ''
     ) AS sub
@@ -42,7 +45,7 @@ sexo AS (
         ROW_NUMBER() OVER (PARTITION BY atendimento_id ORDER BY y DESC, m DESC, d DESC) AS rownumber,
         atendimento_id,
         symptoms_values
-    FROM lc_vital_signs
+    FROM {BDv}
     WHERE LOWER(symptoms_question) LIKE '%sexo%'
 )
 -- PARTE 1: ALERTAS
@@ -52,7 +55,7 @@ SELECT DISTINCT
     sexo.symptoms_values,
     DATE_FORMAT(alert.data_alerta, '%d-%m-%Y %H:%i:%s') AS Data,
     'Alerta' AS tipo_atendimento
-FROM lc_alert AS alert
+FROM {BDa} AS alert
 LEFT JOIN (
     SELECT DISTINCT 
         ROW_NUMBER() OVER (PARTITION BY y, m, d, atendimento_id ORDER BY age DESC) AS rownumber,
@@ -61,7 +64,7 @@ LEFT JOIN (
         d, 
         m,
         y
-    FROM lc_patient
+    FROM {BDp}
     WHERE age <> ''
 ) AS idade ON alert.atendimento_id = idade.atendimento_id
 LEFT JOIN sexo ON alert.atendimento_id = sexo.atendimento_id
@@ -80,7 +83,7 @@ SELECT DISTINCT
     sexo.symptoms_values,
     DATE_FORMAT(falar.data_atendimento,  '%d-%m-%Y %H:%i:%s') AS Data, 
     'falar_com_equipe' AS tipo_atendimento
-FROM lc_speak_to_team AS falar
+FROM {BDt} AS falar
 LEFT JOIN idade_filtrada AS idade ON falar.atendimento_id = idade.atendimento_id 
     AND falar.data_atendimento = idade.data_atendimento
 LEFT JOIN sexo ON falar.atendimento_id = sexo.atendimento_id
@@ -89,3 +92,4 @@ AND DATE_TRUNC('month', falar.data_atendimento) = DATE_TRUNC('month', DATE_ADD('
 AND falar.data_do_handover <> falar.data_atendimento
 AND falar.handover_reason = 'REQUESTED_TEAM_SUPPORT'
 AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
+limit 5*/ 
