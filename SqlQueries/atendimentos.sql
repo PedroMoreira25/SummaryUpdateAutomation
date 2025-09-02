@@ -51,7 +51,7 @@ SELECT DISTINCT
     idade.age,
     sexo.symptoms_values,
     DATE_FORMAT(alert.data_alerta, '%d-%m-%Y %H:%i:%s') AS Data,
-    'Alerta' AS tipo_atendimento
+    alert.resultado
 FROM {BDa} AS alert
 LEFT JOIN (
     SELECT DISTINCT 
