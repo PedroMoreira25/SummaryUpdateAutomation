@@ -17,8 +17,7 @@ from SqlQueries import queryString as qStr
 load_dotenv()
 
 def update(entidade_id, query, sheetId, uBDa, uBDp, uBDs, uBDv, uBDt, uBDr):
-    entidade_id = int(entidade_id)
-    sql = qStr.queryString(query).format(a=entidade_id, BDa=uBDa, BDv=uBDv, BDp=uBDp, BDs=uBDs, BDt=uBDs, BDr=uBDr)
+    sql = qStr.queryString(query).format(a=entidade_id, BDa=uBDa, BDv=uBDv, BDp=uBDp, BDs=uBDs, BDt=uBDt, BDr=uBDr)
     idQuery = aws.idQuery(sql)
     aws.DownloadResultQuery(aws.getQuery(idQuery))
     arquivo_csv = open(f'DownloadsData/{idQuery}.csv', newline='', encoding='utf-8')
@@ -28,3 +27,5 @@ def update(entidade_id, query, sheetId, uBDa, uBDp, uBDs, uBDv, uBDt, uBDr):
     query = query.upper()
     RANGE = os.getenv(query)
     fc.postSheet(sheetId, fc.credenciais(), RANGE, leitor_csv)
+
+

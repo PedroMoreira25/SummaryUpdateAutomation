@@ -1,6 +1,0 @@
-"atendimento_id","entidade_id","document_type","data_alerta","houve_melhora","resultado","score","ultimo_resultado","uuid","y","m","d"
-"8605021632","65","generalist","2023-11-12 07:31:33.000",,"yellow","3",,"7d9f530e-9c15-4b79-a174-0f8bcd20795e","2023","11","12"
-"95331450997","65","generalist","2023-11-12 10:01:39.000","false","yellow","3","green","d47ebc05-e26b-4b1b-b2aa-7436acfcb7b7","2023","11","12"
-"92018963953","65","generalist","2023-11-12 10:37:08.000","false","red","4","grey","1572f305-d45f-4a05-b66c-bc5cf5a0bf08","2023","11","12"
-"12287649999","65","generalist","2023-11-12 10:51:19.000",,"green","2",,"adaeb644-3178-4d3e-8372-e9ac8f07fa73","2023","11","12"
-"6076452960","65","generalist","2023-11-12 10:52:51.000",,"yellow","3",,"a2048a19-a5b4-4cef-8cc9-a8328e96fb8f","2023","11","12"

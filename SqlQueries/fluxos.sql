@@ -34,10 +34,9 @@ SELECT DISTINCT
             ON sexo.atendimento_id=vital.atendimento_id
         WHERE 
             vital.entidade_id={a} 
-            AND DATE_TRUNC('month', vital.data_coleta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))  
+            AND vital.data_coleta >= TIMESTAMP '2023-01-01 00:00:00.000'  
             AND (vital.symptoms_question='Qual é o seu principal sintoma? Aqui vai uma lista das queixas mais frequentes:' OR vital.symptoms_question='OK! Qual é o seu principal sintoma? ' 
                 OR vital.symptoms_question='Qual é o seu principal sintoma? ')
                 AND idade.data = CAST(DATE_FORMAT(vital.data_coleta, '%e/%c/%Y') AS VARCHAR)
                 AND idade.rownumber = 1 
                 AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
-                limit 5 

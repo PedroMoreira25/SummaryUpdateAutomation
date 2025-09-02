@@ -31,4 +31,5 @@ queries = ["alertas", "atendimentos", "cid", "cidades", "comorbidades", "fluxos"
 for q in queries:
     showQuery(LIT_EID, q, alert, pessoas, cid, vital, team, record)
 
+
     

@@ -1,13 +1,10 @@
-SELECT * FROM lc_triage_events WHERE entidade_id = {a} LIMIT 5
-
-/*
 WITH falar_com_data AS (
     SELECT 
         atendimento_id,
         data_atendimento
     FROM {BDt}
     WHERE entidade_id = {a} 
-    AND DATE_TRUNC('month', data_atendimento) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
+    AND data_atendimento >= TIMESTAMP '2023-01-01 00:00:00.000' 
     AND data_do_handover <> data_atendimento
     AND handover_reason = 'REQUESTED_TEAM_SUPPORT'
 ),
@@ -48,7 +45,7 @@ sexo AS (
     FROM {BDv}
     WHERE LOWER(symptoms_question) LIKE '%sexo%'
 )
--- PARTE 1: ALERTAS
+
 SELECT DISTINCT 
     alert.atendimento_id,
     idade.age,
@@ -65,11 +62,10 @@ LEFT JOIN (
         m,
         y
     FROM {BDp}
-    WHERE age <> ''
 ) AS idade ON alert.atendimento_id = idade.atendimento_id
 LEFT JOIN sexo ON alert.atendimento_id = sexo.atendimento_id
 WHERE alert.entidade_id = {a} 
-AND DATE_TRUNC('month', alert.data_alerta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
+AND alert.data_alerta >= TIMESTAMP '2023-01-01 00:00:00.000'  
 AND (idade.rownumber = 1 OR idade.rownumber IS NULL)
 AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
 AND DAY(alert.data_alerta) = idade.d 
@@ -88,8 +84,7 @@ LEFT JOIN idade_filtrada AS idade ON falar.atendimento_id = idade.atendimento_id
     AND falar.data_atendimento = idade.data_atendimento
 LEFT JOIN sexo ON falar.atendimento_id = sexo.atendimento_id
 WHERE falar.entidade_id = {a}
-AND DATE_TRUNC('month', falar.data_atendimento) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))
+AND falar.data_atendimento >= TIMESTAMP '2023-01-01 00:00:00.000' 
 AND falar.data_do_handover <> falar.data_atendimento
 AND falar.handover_reason = 'REQUESTED_TEAM_SUPPORT'
 AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
-limit 5*/ 

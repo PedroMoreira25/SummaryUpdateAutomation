@@ -10,7 +10,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from API_GoogleSheets import functions as fc
 from updateQuery import update 
-
+import idCustomer as idc 
 #update(65, "alertasLitoral", "LITORAL_ID")
 #update(65, "UpComorbidades", "LITORAL_ID")
 
@@ -32,7 +32,7 @@ MAR_EID = os.getenv("MAR_EID")
 
 LITORAL_ID = os.getenv("LITORAL_ID")
 VTRP_ID = os.getenv("VTRP_ID")
-SALTOSPREADSHEET_ID = os.getenv("SALTOSPREADSHEET_ID")
+SALTOSPREADSHEET_ID = os.getenv("SALTO_SPREADSHEET_ID")
 SULCAPIXABA_SPREADSHEET_ID = os.getenv("SULCAPIXABA_SPREADSHEET_ID")
 NOROESTECAPIXABA_SPREADSHEET_ID = os.getenv("NOROESTECAPIXABA_SPREADSHEET_ID")
 MARINGA_SPREADSHEET_ID = os.getenv("MARINGA_SPREADSHEET_ID")
@@ -45,20 +45,25 @@ SULCAPIXABA_SPREADSHEET_ID = os.getenv("SULCAPIXABA_SPREADSHEET_ID")
 NOROESTECAPIXABA_SPREADSHEET_ID = os.getenv("NOROESTECAPIXABA_SPREADSHEET_ID")
 MARINGA_SPREADSHEET_ID = os.getenv("MARINGA_SPREADSHEET_ID")"""
 
-eid = [LIT_EID, VTRP_EID, SALTO_EID, SUL_EID, NORO_EID, MAR_EID]
-query = ["alertas", "atendimentos", "cid", "cidades", "comorbidades", "fluxos", "idade", "sexo", "teleconsulta"]
-idp = [LITORAL_ID, VTRP_ID, SALTOSPREADSHEET_ID, SULCAPIXABA_SPREADSHEET_ID, NOROESTECAPIXABA_SPREADSHEET_ID, MARINGA_SPREADSHEET_ID]
+eid = [LIT_EID, SALTO_EID, SUL_EID, NORO_EID]
+query = ["alertas", "atendimentos", "cid", "cidades", "comorbidades", "fluxos", "idade", "sexo", "teleconsultas"]
+idp = [LITORAL_ID, SALTOSPREADSHEET_ID, SULCAPIXABA_SPREADSHEET_ID, NOROESTECAPIXABA_SPREADSHEET_ID]
 
 #update(LIT_EID, "teste", "LITORAL_ID", BDa, BDp, BDs, BDv, BDt, BDr)
 
 
 #update(LIT_EID, "alertas", LITORAL_ID, BDa, BDp, BDs, BDv, BDt, BDr)
 
+
 a = 0 
 for entidade_id in eid:
     idPlanilha = idp[a]
-    for query in query: 
-        update(entidade_id, query, idPlanilha, BDa, BDp, BDs, BDv, BDt, BDr)
+    for qry in query: 
+        print(idc.idCustomer(int(entidade_id)))
+        print(qry)
+        update(entidade_id, qry, idPlanilha, BDa, BDp, BDs, BDv, BDt, BDr)
     a = a + 1 
+    print()
+    print()
 
 

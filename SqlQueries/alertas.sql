@@ -1,12 +1,3 @@
-SELECT DISTINCT 
-    *
-        FROM 
-            {BDa}
-                WHERE 
-                    entidade_id = {a}
-                LIMIT 5 
-                
-/*
 WITH idade AS(
     SELECT DISTINCT 
         ROW_NUMBER() OVER(PARTITION BY y, m, d, atendimento_id ORDER BY age DESC) AS rownumber,
@@ -16,7 +7,6 @@ WITH idade AS(
         m,
         y
     FROM {BDp}
-    WHERE age<>''
 ),
 sexo AS(
     SELECT DISTINCT 
@@ -36,12 +26,9 @@ FROM {BDa} AS alert
 LEFT JOIN idade ON alert.atendimento_id = idade.atendimento_id 
 LEFT JOIN sexo ON alert.atendimento_id = sexo.atendimento_id
 WHERE alert.entidade_id={a} 
-AND DATE_TRUNC('month', alert.data_alerta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
+AND alert.data_alerta >= TIMESTAMP '2023-01-01 00:00:00.000'  
 AND (idade.rownumber=1 OR idade.rownumber IS NULL)
 AND (sexo.rownumber=1 OR sexo.rownumber IS NULL)
 AND DAY(alert.data_alerta)=idade.d 
 AND MONTH(alert.data_alerta)=idade.m 
 AND YEAR(alert.data_alerta)=idade.y
-
-
-*/

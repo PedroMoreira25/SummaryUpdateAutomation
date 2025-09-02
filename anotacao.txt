@@ -1,6 +1,6 @@
 1. consultas separadas por pasta - OK 
-2. tudo em variável de ambiente - 
-3. utilizar laço e array
+2. tudo em variável de ambiente - OK
+3. utilizar laço e array - OK 
 4. jogar tudo isso no Docker
 5. rodar no Docker 
 
@@ -21,3 +21,14 @@ NOROESTECAPIXABA_SPREADSHEET_ID=1o5xv_fWeHbEqeZccwEwwpm5Dt1bHLEwFG3c2_RWZGzI#|
 MARINGA_SPREADSHEET_ID=1h6D67BNog2Z1Gzif3DwQ4M30dsgn_A5jjCtCI-2ba9k         #|
 #----------------------------------------------------------------------------|
 """
+
+NOVO -> LITORAL_ID=1RzjlZ6KW2UEHC5LMpkYoEzlNi0vnaDMf3KBzHuxC2Y0
+
+# ID das planilhas de teste --------------------------------------------------#
+LITORAL_ID=1_UG9ihXtc9rS-p4wO8imxuKyWoElVCwj-LPptYelaBs                       |
+VTRP_ID=1ZxpJ9o_eXpeL7JPwPSlt5s2ekj-N087l7uWAA7t1tTU                          |
+SALTO_SPREADSHEET_ID=1JIgj86UmH_KgZ8J4n9xylbvwg-DCUnAM7gVAOARyHSQ             |
+SULCAPIXABA_SPREADSHEET_ID=1_NB9zEfKFeCRwZLa7KUFO2ieSW4OOzpuD5nqhMBVHCA       |
+NOROESTECAPIXABA_SPREADSHEET_ID=19qVu3E0wpr3Rb7CfHppf5ULpKFdjsYTmITWKiK6LJ5M  |
+MARINGA_SPREADSHEET_ID=1zMKm8ZvxhIQ5PNzMk0BHwg9mV5E3sLwtukI8qH8LIY4           |
+------------------------------------------------------------------------------#
