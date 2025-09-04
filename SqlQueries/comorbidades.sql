@@ -35,12 +35,16 @@ SELECT DISTINCT
         WHERE 
             comor.entidade_id={a}
             AND comor.data_coleta >= TIMESTAMP '2023-01-01 00:00:00.000' 
-            AND (comor.symptoms_question='Você apresenta alguma doença crônica?' 
-                OR comor.symptoms_question='Você apresenta alguma doença crônica como pressão alta, diabetes e câncer?'
-                OR comor.symptoms_question='Você apresenta alguma doença crônica ou toma remédio para algum dos itens abaixo?'
-                OR comor.symptoms_question='Você se identifica com algum dos grupos indicados abaixo?'
-                OR comor.symptoms_question='Possui alguma das doenças indicadas abaixo?'
-                OR comor.symptoms_question='Você se identifica com algum dos grupos indicados abaixo? ')
+            AND comor.symptoms_question IN (
+                'Você apresenta alguma doença crônica?', 
+                'Você apresenta alguma doença crônica como pressão alta, diabetes e câncer?',
+                'Você apresenta alguma doença crônica ou toma remédio para algum dos itens abaixo?',
+                'Você se identifica com algum dos grupos indicados abaixo?',
+                'Possui alguma das doenças indicadas abaixo?',
+                'Você se identifica com algum dos grupos indicados abaixo? ',
+                'Você apresenta alguma doença crônica como:',
+                'Você se identifica com algum dos grupos indicados abaixo?',
+                '')
             AND TRIM(comor.symptoms_values) NOT IN (
                 'Resultado de teste RT-PCR ou antígeno positivo',
                 'Contato positivo',

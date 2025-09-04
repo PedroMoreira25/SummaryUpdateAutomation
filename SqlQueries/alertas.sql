@@ -32,3 +32,4 @@ AND (sexo.rownumber=1 OR sexo.rownumber IS NULL)
 AND DAY(alert.data_alerta)=idade.d 
 AND MONTH(alert.data_alerta)=idade.m 
 AND YEAR(alert.data_alerta)=idade.y
+
