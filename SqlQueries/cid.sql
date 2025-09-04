@@ -43,15 +43,17 @@ sexo AS (
 	FROM {BDv}
 	WHERE LOWER(symptoms_question) LIKE '%sexo%'
 )
-SELECT DISTINCT soap.atendimento_id,
+SELECT DISTINCT 
+	soap.atendimento_id,
 	idade_filtrada.age,
 	sexo.symptoms_values,
 	soap.document_evolution_soap_cid,
-	soap.data_do_soap_evolution
-FROM {BDs} AS soap
-	LEFT JOIN idade_filtrada ON idade_filtrada.atendimento_id = soap.atendimento_id
-	AND idade_filtrada.data_do_soap_evolution = soap.data_do_soap_evolution
-	LEFT JOIN sexo ON sexo.atendimento_id = soap.atendimento_id
-	AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
-WHERE soap.entidade_id = {a}
-	AND soap.data_do_soap_evolution >= TIMESTAMP '2023-01-01 00:00:00.000' 
+    DATE_FORMAT(soap.data_do_soap_evolution, '%d-%m-%Y %H:%i:%s')
+		FROM {BDs} AS soap
+			LEFT JOIN idade_filtrada ON idade_filtrada.atendimento_id = soap.atendimento_id
+				AND idade_filtrada.data_do_soap_evolution = soap.data_do_soap_evolution
+			LEFT JOIN sexo ON sexo.atendimento_id = soap.atendimento_id
+				AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
+			WHERE 
+				soap.entidade_id = {a}
+				AND soap.data_do_soap_evolution >= TIMESTAMP '2023-01-01 00:00:00.000' 

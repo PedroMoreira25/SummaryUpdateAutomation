@@ -59,7 +59,7 @@ SELECT DISTINCT
     record.atendimento_id,
     idade.age,
     sexo.symptoms_values,
-    record.data_coleta,
+    DATE_FORMAT(record.data_coleta, '%d-%m-%Y %H:%i:%s'),
     'Teleconsulta' AS teleconsulta
 FROM 
     {BDr} AS record

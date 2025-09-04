@@ -22,7 +22,7 @@ SELECT DISTINCT
     comor.atendimento_id,
     idade.age,
     sexo.symptoms_values,
-    comor.data_coleta,
+    DATE_FORMAT(comor.data_coleta, '%d-%m-%Y %H:%i:%s')
     TRIM(comor.symptoms_values)
     FROM 
         {BDv} AS comor 
