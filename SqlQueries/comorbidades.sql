@@ -43,8 +43,8 @@ SELECT DISTINCT
                 'Possui alguma das doenças indicadas abaixo?',
                 'Você se identifica com algum dos grupos indicados abaixo? ',
                 'Você apresenta alguma doença crônica como:',
-                'Você se identifica com algum dos grupos indicados abaixo?',
-                '')
+                'Você se identifica com algum dos grupos indicados abaixo?'
+                )
             AND TRIM(comor.symptoms_values) NOT IN (
                 'Resultado de teste RT-PCR ou antígeno positivo',
                 'Contato positivo',
@@ -62,7 +62,13 @@ SELECT DISTINCT
                 'Criança',
                 'Usa rotineiramente cotonete',
                 'Ex-tabagista',
-                'Tem otite de repetição'
+                'Tem otite de repetição',
+                'Colaborador da Unimed Litoral/Maternidade Santa Luiza',
+                'Idade IGUAL ou MAIOR do que  70 anos',
+                'Idade menor ou igual a 1 ano',
+                'Idade maior ou igual a 60 anos',
+                'Idade MENOR do que 1 ano',
+                'Outros'
                 )
             AND idade.dataa = CAST(DATE_FORMAT(comor.data_coleta, '%e/%c/%Y') AS VARCHAR)
             AND idade.rownumber = 1 
