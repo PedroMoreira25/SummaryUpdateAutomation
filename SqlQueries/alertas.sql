@@ -32,7 +32,7 @@ SELECT DISTINCT
             LEFT JOIN sexo 
                 ON alert.atendimento_id = sexo.atendimento_id
             WHERE alert.entidade_id={a} 
-                AND alert.data_alerta >= TIMESTAMP '2023-01-01 00:00:00.000'  
+                AND DATE_TRUNC('month', alert.data_alerta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
                 AND (sexo.rownumber=1 OR sexo.rownumber IS NULL)
 
 

@@ -84,7 +84,7 @@ LEFT JOIN idade_filtrada AS idade ON falar.atendimento_id = idade.atendimento_id
     AND falar.data_atendimento = idade.data_atendimento
 LEFT JOIN sexo ON falar.atendimento_id = sexo.atendimento_id
 WHERE falar.entidade_id = {a}
-AND falar.data_atendimento >= TIMESTAMP '2023-01-01 00:00:00.000' 
+AND DATE_TRUNC('month', falar.data_atendimento) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))
 AND falar.data_do_handover <> falar.data_atendimento
 AND falar.handover_reason = 'REQUESTED_TEAM_SUPPORT'
 AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)

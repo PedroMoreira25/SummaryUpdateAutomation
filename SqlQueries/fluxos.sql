@@ -33,8 +33,8 @@ SELECT DISTINCT
             sexo 
             ON sexo.atendimento_id=vital.atendimento_id
         WHERE 
-            vital.entidade_id={a} 
-            AND vital.data_coleta >= TIMESTAMP '2023-01-01 00:00:00.000'  
+            vital.entidade_id={a}   
+            AND DATE_TRUNC('month', vital.data_coleta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))
             AND vital.symptoms_question IN (
                 'Qual é o seu principal sintoma? Aqui vai uma lista das queixas mais frequentes:', 
                 'OK! Qual é o seu principal sintoma? ',

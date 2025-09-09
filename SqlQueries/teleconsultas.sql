@@ -69,9 +69,10 @@ LEFT JOIN
 LEFT JOIN 
     sexo ON record.atendimento_id = sexo.atendimento_id
 WHERE 
-    record.entidade_id = {a}
-    AND record.data_coleta >= TIMESTAMP '2023-01-01 00:00:00.000' 
+    record.entidade_id = {a}    
+    AND record.data_coleta >= TIMESTAMP'2023-01-01 00:00:00.000'
     AND record.setor='IN_PROGRESS'
     AND record.servicestep='telemedicine'
     AND record.usuario<>'SISTEMA'  
     AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
+    --AND DATE_TRUNC('month', record.data_coleta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))

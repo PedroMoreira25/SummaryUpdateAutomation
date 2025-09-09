@@ -34,7 +34,7 @@ SELECT DISTINCT
             ON comor.atendimento_id=sexo.atendimento_id 
         WHERE 
             comor.entidade_id={a}
-            AND comor.data_coleta >= TIMESTAMP '2023-01-01 00:00:00.000' 
+            AND DATE_TRUNC('month', comor.data_coleta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))  
             AND comor.symptoms_question IN (
                 'Você apresenta alguma doença crônica?', 
                 'Você apresenta alguma doença crônica como pressão alta, diabetes e câncer?',

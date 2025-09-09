@@ -37,3 +37,6 @@ WHERE
     AND idade.rownumber=1 
     AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
     AND y IN (2023, 2024, 2025)
+
+    --AND y = YEAR(DATE_TRUNC('month', DATE_ADD('month', -1, NOW())))
+    --AND m = MONTH(DATE_TRUNC('month', DATE_ADD('month', -1, NOW())))

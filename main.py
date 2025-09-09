@@ -37,14 +37,15 @@ SULCAPIXABA_SPREADSHEET_ID = os.getenv("SULCAPIXABA_SPREADSHEET_ID")
 NOROESTECAPIXABA_SPREADSHEET_ID = os.getenv("NOROESTECAPIXABA_SPREADSHEET_ID")
 MARINGA_SPREADSHEET_ID = os.getenv("MARINGA_SPREADSHEET_ID")
 
-
+ID = os.getenv("IDTESTE")
+RANGETESTE = os.getenv("RANGETESTE")
 #eid = [LIT_EID, SALTO_EID, SUL_EID, NORO_EID]
 #query = ["alertas", "atendimentos", "cid", "cidades", "comorbidades", "fluxos", "idade", "sexo", "teleconsultas"]
 #idp = [LITORAL_ID, SALTOSPREADSHEET_ID, SULCAPIXABA_SPREADSHEET_ID, NOROESTECAPIXABA_SPREADSHEET_ID]
 
-eid = [SUL_EID, NORO_EID, MAR_EID]
-query = ["fluxos", "comorbidades"]
-idp = [SULCAPIXABA_SPREADSHEET_ID, NOROESTECAPIXABA_SPREADSHEET_ID, MARINGA_SPREADSHEET_ID]
+eid = [76]
+query = ["teste"]
+idp = [ID]
 
 a = 0 
 for entidade_id in eid:
@@ -56,5 +57,3 @@ for entidade_id in eid:
     a = a + 1 
     print()
     print()
-
-

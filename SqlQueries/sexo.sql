@@ -32,8 +32,8 @@ SELECT DISTINCT
             ON sexo.atendimento_id = vital.atendimento_id 
         WHERE 
             vital.entidade_id={a} 
-            AND vital.data_coleta >= TIMESTAMP '2023-01-01 00:00:00.000'  
+            AND vital.data_coleta >= TIMESTAMP'2023-01-01 00:00:00.000'
             AND sexo.rownumber = 1
             AND idade.rownumber = 1
             AND DATE_FORMAT(vital.data_coleta, '%e/%c/%Y') = idade.dataa
-            
+            --AND DATE_TRUNC('month', vital.data_coleta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))
