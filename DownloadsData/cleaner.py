@@ -11,7 +11,7 @@ files = glob.glob(os.path.join(folder, "*.csv"))
 files.sort(key=os.path.getmtime)
 
 # Se tiver mais de 5, apaga os mais antigos
-while len(files) > 5:
+while len(files) > 0:
     oldest = files.pop(0)  # remove o primeiro (mais antigo)
     os.remove(oldest)
     print(f"Arquivo removido: {oldest}")

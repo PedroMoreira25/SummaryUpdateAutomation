@@ -56,4 +56,4 @@ SELECT DISTINCT
 				AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
 			WHERE 
 				soap.entidade_id = {a}
-				AND soap.data_do_soap_evolution >= TIMESTAMP'2023-01-01 00:00:00.000'
+				AND DATE_TRUNC('month', soap.data_do_soap_evolution) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 

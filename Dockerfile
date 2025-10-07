@@ -1,11 +1,11 @@
-#criação da imagem 
-FROM python:3.10-slim 
+FROM python:3 
 
-#diretório de trabalho dentro do container
-WORKDIR /app 
+WORKDIR /app
 
-COPY . .
+COPY requirements.txt . 
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "teste.py"]
+COPY . . 
+
+CMD [ "python3", "main.py" ]

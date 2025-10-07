@@ -4,7 +4,7 @@ WITH falar_com_data AS (
         data_atendimento
     FROM {BDt}
     WHERE entidade_id = {a} 
-    AND data_atendimento >= TIMESTAMP '2023-01-01 00:00:00.000' 
+    AND DATE_TRUNC('month', data_atendimento) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))    
     AND data_do_handover <> data_atendimento
     AND handover_reason = 'REQUESTED_TEAM_SUPPORT'
 ),
@@ -64,8 +64,8 @@ LEFT JOIN (
     FROM {BDp}
 ) AS idade ON alert.atendimento_id = idade.atendimento_id
 LEFT JOIN sexo ON alert.atendimento_id = sexo.atendimento_id
-WHERE alert.entidade_id = {a} 
-AND alert.data_alerta >= TIMESTAMP '2023-01-01 00:00:00.000'  
+WHERE alert.entidade_id = {a}
+AND DATE_TRUNC('month', alert.data_alerta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))   
 AND (idade.rownumber = 1 OR idade.rownumber IS NULL)
 AND (sexo.rownumber = 1 OR sexo.rownumber IS NULL)
 AND DAY(alert.data_alerta) = idade.d 
