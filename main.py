@@ -11,8 +11,6 @@ from googleapiclient.errors import HttpError
 from API_GoogleSheets import functions as fc
 from updateQuery import update 
 import idCustomer as idc 
-#update(65, "alertasLitoral", "LITORAL_ID")
-#update(65, "UpComorbidades", "LITORAL_ID")
 
 load_dotenv()
 
@@ -37,12 +35,9 @@ SULCAPIXABA_SPREADSHEET_ID = os.getenv("SULCAPIXABA_SPREADSHEET_ID")
 NOROESTECAPIXABA_SPREADSHEET_ID = os.getenv("NOROESTECAPIXABA_SPREADSHEET_ID")
 MARINGA_SPREADSHEET_ID = os.getenv("MARINGA_SPREADSHEET_ID")
 
-ID = os.getenv("IDTESTE")
-RANGETESTE = os.getenv("RANGETESTE")
-eid = [LIT_EID, SALTO_EID, SUL_EID, NORO_EID]
+eid = [LIT_EID, SALTO_EID, SUL_EID, NORO_EID, MAR_EID]
 query = ["alertas", "atendimentos", "cid", "cidades", "comorbidades", "fluxos", "idade", "sexo", "teleconsultas"]
-idp = [LITORAL_ID, SALTOSPREADSHEET_ID, SULCAPIXABA_SPREADSHEET_ID, NOROESTECAPIXABA_SPREADSHEET_ID]
-
+idp = [LITORAL_ID, SALTOSPREADSHEET_ID, SULCAPIXABA_SPREADSHEET_ID, NOROESTECAPIXABA_SPREADSHEET_ID, MARINGA_SPREADSHEET_ID]
 
 a = 0 
 for entidade_id in eid:

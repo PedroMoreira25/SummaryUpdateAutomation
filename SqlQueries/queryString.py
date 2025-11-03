@@ -18,7 +18,13 @@ def queryString(query):
         qStr  = p.Path(f'SqlQueries/{query}.sql').read_text(encoding="utf-8")
         str(qStr)
         return(qStr)
-    except:
-        return 0 
+    except FileNotFoundError:
+        print(f"Arquivo '{query}.sql' não encontrado na pasta SqlQueries.")
+        return ""
         print("Deu erro ao encontrar o arquivo SQL")
+        print("Deu erro ao encontrar o arquivo SQL")
+        print("Deu erro ao encontrar o arquivo SQL")
+        print("Deu erro ao encontrar o arquivo SQL")
+         
+        
      
