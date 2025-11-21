@@ -20,6 +20,7 @@ BDv = os.getenv("BDrespostas")
 BDs = os.getenv("BDcid")
 BDt = os.getenv("BDfalar")
 BDr = os.getenv("BDrecord")
+BDs2 = os.getenv("BDcid2")
 
 LIT_EID = os.getenv("LIT_EID")
 VTRP_EID = os.getenv("VTRP_EID")
@@ -39,13 +40,25 @@ eid = [LIT_EID, SALTO_EID, SUL_EID, NORO_EID, MAR_EID]
 query = ["alertas", "atendimentos", "cid", "cidades", "comorbidades", "fluxos", "idade", "sexo", "teleconsultas"]
 idp = [LITORAL_ID, SALTOSPREADSHEET_ID, SULCAPIXABA_SPREADSHEET_ID, NOROESTECAPIXABA_SPREADSHEET_ID, MARINGA_SPREADSHEET_ID]
 
-a = 0 
+""" a = 0 
 for entidade_id in eid:
     idPlanilha = idp[a]
     for qry in query: 
         print(idc.idCustomer(int(entidade_id)))
         print(qry)
         update(entidade_id, qry, idPlanilha, BDa, BDp, BDs, BDv, BDt, BDr)
+    a = a + 1 
+    print()
+    print()
+ """
+a = 0
+for entidade_id in eid:
+    idPlanilha = idp[a]
+    query = idc.queriesCustomer(int(entidade_id))
+    for qry in query:
+        print(idc.idCustomer(int(entidade_id)))
+        print(qry)
+        update(entidade_id, qry, idPlanilha, BDa, BDp, BDs, BDv, BDt, BDr, BDs2)
     a = a + 1 
     print()
     print()

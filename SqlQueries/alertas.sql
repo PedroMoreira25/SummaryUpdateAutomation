@@ -34,5 +34,3 @@ SELECT DISTINCT
             WHERE alert.entidade_id={a} 
                 AND DATE_TRUNC('month', alert.data_alerta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW())) 
                 AND (sexo.rownumber=1 OR sexo.rownumber IS NULL)
-
-
