@@ -23,6 +23,19 @@ SELECT DISTINCT
     vital.data_coleta,
     idade.age,
     sexo.symptoms_values,
+    CASE 
+        WHEN vital.symptoms_question = 'Você acha que quebrou algum osso do seu corpo?' THEN 'Ossos Quebrados'
+        WHEN vital.symptoms_question = 'Você está perdendo sangue, ou está com uma queimadura na pele?' THEN 'Perda de Sangue ou Queimadura na Pele'
+        WHEN vital.symptoms_question = 'Você está se sentindo donto ou com vertigem?' THEN 'Tontura ou Vertigem'
+        WHEN vital.symptoms_question = 'Você está sentindo dor no peito, braços, costas, pescoço ou mandíbula?' THEN 'Dor no peito, braços, costas, pescoço ou mandíbula'
+        WHEN vital.symptoms_question = 'Você está sentindo formigamento ou paralisia em algum membro do corpo?' THEN 'Formigamento ou Paralisia'
+        WHEN vital.symptoms_question = 'Você está sentindo perda de equilíbrio ou dificuldade para andar?' THEN 'Perda de Equilíbrio ou Dificuldade para Andar'
+        WHEN vital.symptoms_question = 'Você sente falta de ar ou dificuldade para respirar?' THEN 'Falta de Ar'
+        WHEN vital.symptoms_question = 'Você tem dificuldade para falar ou entender o que os outros estão dizendo?' THEN 'Dificuldade para falar ou Entender o que estão dizendo'
+        WHEN vital.symptoms_question = 'Você teve algum episódio de desmaio recentemente (24 horas)?' THEN 'Desmaio recente'
+        WHEN vital.symptoms_question = 'Você teve alguma queda e está sentindo muita dor?' THEN 'Queda ou muita dor'
+        ELSE vital.symptoms_question
+    END AS symptoms_question_indicador,
     vital.symptoms_values
     FROM 
         {BDv} AS vital 
@@ -35,6 +48,7 @@ SELECT DISTINCT
         WHERE 
             vital.entidade_id={a}
             AND DATE_TRUNC('month', vital.data_coleta) = DATE_TRUNC('month', DATE_ADD('month', -1, NOW()))
+            AND vital.symptoms_values NOT IN ('Não')
             AND vital.symptoms_question NOT IN(
                 'Clique em "Outros" e digite o nome completo do responsável legal do paciente e clique em ✅',
                 'Clique em "Outros" e digite o CPF do responsável legal do paciente no formato xxx.xxx.xxx-xx e clique em ✅',
